@@ -10,4 +10,61 @@ El controlador PID combina trse acciones para corregir:
 ### 3.1 PID Paralelo.
 En estsa configuracion, las acciones proporcional, integral y derivativa se calculan de manera independiente y luego se suma para obtener la señal de control:
 
-$$U(s)=K_p*E(s)+K_i \frac{E(s)}{s}+k_d*s*E(s)$$
+$$ U(s) = K_p * E(s) + K_i \frac{E(s)}{s} + K_d * s * E(s)$$
+
+- Ventajas:
+  - Facilita la comprension y la implementacion, especialmente en sistemas digitale.
+  - Permite ajustar cada accion de control por separado.
+- Desventajas:
+  - El ajuste puede ser menos intuitivo, ya que cada parametro afecta solo su componente correspondiente y requiere adaptaciones.
+  - Las reglas de sintonizacion clasicas, como Ziegler-Nichols, no se aplicacan directamente y requiere adaptaciones.
+
+### 3.2 PID ideal.
+Tambien conocida como forma estandar o no interactiva, en esta arquitectura la ganancia proporcional $K_p$ multiplica la suma de las acciones I y D.
+
+$$ U(s) = K_p ( E(s) + \frac{1}{T_i} \frac{E(s)}{s} + T_d * s * E(s) )$$
+
+- Ventajas:
+  - El ajuste de $K_p$ afecta simultaneamnete a las dos acciones, lo que puede simplificar la sintomizacion.
+  - Es compatible con muchas reglas de sintomizacion estandar.
+- Desventajas:
+  - Menor idependecia entre las acciones de control, lo que puede limitar la flexibilidad en cierto casos.   
+   
+## 3.3 PID serie
+
+En la forma serie, tambien conocida como interactiva, las acciones de control estan interrelacionadas y la ganancia proporcional afecta a todasa ellas:
+
+$$ U(s) = ((E(s)(1+ T_d * s)) K_p)(1+\frac{1}{T_i * s })$$
+
+- Ventajas:
+  - Refleja el comportamineto de los controladores analogicas y neumatico tradicionales.
+  - Puede ofrecer una respuesta mas natural en ciertos sistemas fisicos.
+- Desventajas:
+  - La interaccion entre las accioines de control puede complicar el ajuste y la prediccion del comportamiento del sistema.
+
+## 4. Sintonizacion por prueba y error
+
+Es un metodo empirico y directo para ajustar los parametros de un controlador PID cuando no se dispone de un modelo matematico preciso del sistema o cuando se busaca una solucion rapida y practica. Este metodo se basa en la observacion y ajuste iterativo de los parametros del controlador para lograr una respuesta desada del sistema.
+
+### 4.1 ¿Como aplicar la sintonizacion por prueba y error?
+1. Establecer valores inicales:
+   - Comenzar con una ganacia proporcional baja.
+   - Configurara el tiempo integral en un valor alto.
+   - Establecer el tiempo derivativo en cero.
+2. Ajustar la ganancia proporcional:
+
+    - Incrementar gradualmente el $K_p$ hasta que el sistema comience a responder de manera mas rapida.
+    - Observar si aparecen oscilaciones; Si son excesivas, reducir $K_p$
+3. Ajustar el tiempo integral:
+
+   - Reducir $T_i$ Para eliminar el error en un estado estacionario.
+   - Si el sistema comienza a oscilar o se vuelve inestable, aumenta $T_i$ nuevamente.
+4. Ajustar el tiemo derivativo.
+   - Introducir $T_d$ para mejorar la estabilidad y reducir el sobrepulso.
+   - Ajustar $T_d$ cuidadosamente, ya que valores altos pueden amplificar el ruido y causar inestabilidad.
+5. Iterar y observar:
+   - Repertir los pasos anteriores, realizando pequeños ajustes y observando la respuesta del sistema hasta alcanzar un comportamiento satisfactorio.
+
+- Ventajas:
+  -  Simplicidad: No requiere conocimineto matematicos avanzados ni modelos del sistemas.
+  -  Aplicabilidad: Util para sitemas donde otro metodos de sintomizacion no son practicos 

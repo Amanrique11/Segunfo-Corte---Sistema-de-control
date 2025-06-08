@@ -68,3 +68,33 @@ Es un metodo empirico y directo para ajustar los parametros de un controlador PI
 - Ventajas:
   -  Simplicidad: No requiere conocimineto matematicos avanzados ni modelos del sistemas.
   -  Aplicabilidad: Util para sitemas donde otro metodos de sintomizacion no son practicos 
+## 5. Criterios de desempeño para diseño de controladores PID.
+### 5.1 Indices integrales de error.
+#### 5.1.1 ISE (Integral of Squered Error)
+$$ IAE = \int_0^T [e(t)]^2 dt $$
+
+- Penaliza con fuerza los errores grandes, ya que los eleva al cuadrado.
+- Favorece respuestas rapidas, pero puede inducir oscilaciones y poca estabilidad relativa.
+
+#### 5.1.2 IAE (Integral of Absolute Error)
+$$ IAE = \int_0^T |e(t)| dt $$
+
+- Penaliza todos los errores por igual.
+- Produce respuesta mas amortiguadas con sobre impulso modesto, pero es mas complejo de calcular analiticamente.
+#### 5.1.3 ITAE (Integral Time-weighted Absolute Error)
+$$ ITAE = \int_0^T t*|e(t)| dt $$
+
+- Aumenta el peso de errores que persisten mas tiempo.
+- Genera sistemas con bajo sobreimpulso y buenas caracteristicas de amortiguamiento.
+
+#### 5.1.4 ITSE (Integral Time-weighted Squared Error)
+$$ ITSE = \int_0^T t*[e(s)]^2 dt $$
+
+- Penalizaa tanto errores grandes como errores persistentes a lo largo del tiempo.
+- Proporciona un quilibrio entre rapidez, amortiguamineto y estabilidad.
+
+### 5.2 Profundizacion
+- ISE es ideal para suprimir errores grandes pero suele derivar en oscilaciones, debido a la rapidez en la correcion.
+- IAE genera una respuesta mas baleanceada, evitando sobresaturacion del actuador.
+- ITAE actua errores a largo plazo, resultando en un control mas conservador y con excelente amortiguamiento.
+- ITSE combina lo mejor de ISE y ITAE, penalizando errores grandes y tardios, aunque puede complocar la sincronizacion.

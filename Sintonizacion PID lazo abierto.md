@@ -98,3 +98,74 @@ $$ ITSE = \int_0^T t*[e(s)]^2 dt $$
 - IAE genera una respuesta mas baleanceada, evitando sobresaturacion del actuador.
 - ITAE actua errores a largo plazo, resultando en un control mas conservador y con excelente amortiguamiento.
 - ITSE combina lo mejor de ISE y ITAE, penalizando errores grandes y tardios, aunque puede complocar la sincronizacion.
+## 6. Metodos de sintonizacion en lazo abierto 
+### 6.1 Metodo de Ziegler-Nichols
+Es un procedimineto empiricio diseñado para sintonnizar controladores PID cuando la planta no tiene un modelo matematico conocido, solo se necesita una respuesta tipo S cuando se aplica un escalon en laza abierto.
+#### 6.1.1 Pasos del procedimiento
+1. Configurar el sistema en lazo abieto.
+   - Desconectar el control PID o ponerlo en modo manual.
+   - Asugurarse de que el sistema este estable y en estado estacionario.
+2. Aolicar un escalon en la entrada.
+   - Introducir un cambio de entrada y registrar la respuesta del proceso hasta que se estabilice.
+3. Observar la curva de reaccion-
+   - La respuesta deberia tener forma de S. Encontart el punto de inflexion.
+   - Traza una tangente en ese punto: donde se obtendra el tiempo muerto (L) y la constate de tiempo $\tau$.
+4. Calcular los parametros PID.
+   - Las formular de Ziegler-Nichols para control clasico PID son:
+
+   | Controlador | $$K_p$$ | $$T_i$$ | $$T_d$$ |
+   -------------|------------|---------|-----|
+   | P | $$\frac{\tau}{K_p*L}$$ | x | x |
+   | PI | $$0.9(\frac{\tau}{K_p*L}$$ | $$3.3*L$$ | x |
+   | PID | $$1.2(\frac{\tau}{K_p*L})$$ | $$2*L$$ | $$0.5*L$$ |
+#### 6.1.2 Ventajas y limitaciones.
+
+Ventajas: 
+- Rapido y facil de aplicar sin modelo previo.
+- Permite obtner una respuesta amortiguada $\frac{1}{4}$.
+
+  
+Limitaciones:
+- Solo es aplicable a sistemas estables en lazo abierto con respuesta tipo S.
+- Puede generar valores de control agresivos y sobre impulso alto.
+- Las aproximaciones pueden subir inestabale en ciertos precesos.
+
+### 6.2 Metodo Cohen-Coon.
+Es un planteamineto empirico diseñado para sintomizar controladores PID ( en forma paralela) en plamtas que pueden modelarse como un sistema de primer orden con retardo. Fue desarrollado por Cohen y Coon en 1953 para mejorar el rendimiento de sistemas con retardos mayores.
+
+#### 6.2.1 Pasos para aplicarlo.
+1. Realiza un ensayo de escalon en lazo abierto.
+   - Poner el controlador en manual, intrucir un cambio de escalon en la entrada y registar la salida hasta estabilizarce.
+2. Obten los paramtros:
+   - Ganancia del proceso: Cambio en la salida dividido por cambio de la entrada.
+   - Retardo: Tiempo hasta el inicio de la respuesta, medidio desde el escalon hasta que la tangente a la curva intercepta con la base.
+   - Constante de tiempo: Tiempo que tarda la respuesta en alcanzar el 63% del cambio total, medido desde donde termina el retardo.
+#### 6.2.2 Formula para la sintonizacion.
+| Tipo de controlador | $$K_p$$ | $$T_i$$ | $$T_d$$ |
+|---------------------|----------|--------|---------|
+| P | $$\frac{1}{K}* \frac{\tau}{L}* \frac{3*\tau + L}{3*\tau}$$| X | X |
+|PI | $$\frac{1}{K}* \frac{\tau}{L}* \frac{10.8*\tau + L}{12*\tau}$$ | $$\frac{30+3(\frac{L}{\tau})}{9+20(\frac{L}{\tau})}*L$$ | X |
+| PID | $$\frac{1}{K}* \frac{\tau}{L}* \frac{16*\tau + 3 * L}{12* \tau}$$ | $$2*L$$ | $$0.5*L$$ |
+
+#### 6.2.3 Ventajas y limitaciones.
+
+Ventajas:
+- Espesifico para sistemas con retardo significativo, funcionando bien cuando $\frac{L}{\tau}$ este entre aproximadamente 0.6 y 4.5.
+-  Busca una respuesta rapida con buen amortiguamiento.
+-  Ofrece una mejor base inicial que Ziegler-Nichols para sistemas con retardo mas grande.
+Limitaciones:
+- Es un metodo offline, require prueba en lazo abierto antes de aplicar el controlador.
+- Pueden generar ajustes agresivos; se recomienda reducir la ganancia resultante en 50% para mejorar la estabilidad.
+- Solo es valido para procesos de tipo FOPTD; no aplica bien a procesos de orden superior o no lineales.
+### 6.3 Metodo por coeficinete de ajustabilidad.
+
+| y | $$K_p$$ | $$T_in$$ | $$T_d$$ |
+|-----|-------|-----------|--------|
+| 0 a 0.1 | $$\frac{5}{K}$$ | $$\tau$$ | X |
+| 0.1 a 0.2 | $$\frac{0.5}{K}$$ | $$\tau$$ | X | 
+| 0.2 a 0.5 | $$\frac{0.5(1+0.5 * y)}{K* y}$$ | $$\tau(1+0.5* y)$$ | $$\tau * \frac{0.5* y}{0.5*y+1}$$ |
+
+Donde y = $\frac{L}{\tau}$
+
+
+

@@ -14,5 +14,28 @@
   | Controlador | $$K_p$$ | $$T_i$$ | $$T_d$$ |
   |-------------|-------|---------|---------|
   | P | $$0.5*K_u$$ | X | X |
-  | PI | $$0.45*K_u$$ | $$\frac{P_u}{1.2} | X |
-  | PID | $$0.6*K_u$$ 
+  | PI | $$0.45*K_u$$ | $$\frac{P_u}{1.2}$$ | X |
+  | PID | $$0.6*K_u$$  | $$\frac{P_u}{2}$$ | $$\frac{P_u}{8}$$ |
+  
+5. Implemantacion y afinacion fino:
+   - La sintonizacion resultante suele generar una relacion de decaimineto del 25%.
+   - Sin embargo, puede ser nesecaria un ajuste adicional manual para bajar el sobreimpulso, mejorar la respuesta o adaptarse a restricciones del sistema.
+
+### 1.2 Ventajas y Desventajas.
+
+- Ventajas:
+   - Sencillo de aplicar: Solo se varia la ganancia proporcional.
+   - Se captura la dinamica real del lazo completo, incluyendo la planta y sensores.
+
+- Desventajas:
+  - Se lleva el sistema al borde de la inestabilidad, lo que puede ser arriesgado en ciertos procesos.
+  - Pueden causar oscilaciones excivas o salir del rango seguro para sistemas delicados.
+
+## 2. Metodo de rele.
+
+El metodo de rele es otro tecnica clasica de sintonizacion en lazo cerrado para PID, mas segura y autamatizable que es el metodo de Ziegler & Nichols.
+
+### 2.1 ¿En que consiste?
+
+1. Reemplazar el controlador PID (o al menos P) por un rele:
+   Se sustituye la accion proporcional por un señal que alterna un valor alto (+d) y uno bajo (-d) 

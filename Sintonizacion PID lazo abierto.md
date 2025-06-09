@@ -12,6 +12,9 @@ En estsa configuracion, las acciones proporcional, integral y derivativa se calc
 
 $$ U(s) = K_p * E(s) + K_i \frac{E(s)}{s} + K_d * s * E(s)$$
 
+![download](https://github.com/user-attachments/assets/cf8a2ca3-b18d-4b78-9070-5f05c2103b05)
+
+Figura 1: Diagrama de bloques arquitectura paralelo.
 - Ventajas:
   - Facilita la comprension y la implementacion, especialmente en sistemas digitale.
   - Permite ajustar cada accion de control por separado.
@@ -24,6 +27,10 @@ Tambien conocida como forma estandar o no interactiva, en esta arquitectura la g
 
 $$ U(s) = K_p ( E(s) + \frac{1}{T_i} \frac{E(s)}{s} + T_d * s * E(s) )$$
 
+![download](https://github.com/user-attachments/assets/75b92509-813e-42b1-b654-4fccc0639c9d)
+
+Figura 2: Arqeuitectura ideal diagrama de bloques.
+
 - Ventajas:
   - El ajuste de $K_p$ afecta simultaneamnete a las dos acciones, lo que puede simplificar la sintomizacion.
   - Es compatible con muchas reglas de sintomizacion estandar.
@@ -35,6 +42,10 @@ $$ U(s) = K_p ( E(s) + \frac{1}{T_i} \frac{E(s)}{s} + T_d * s * E(s) )$$
 En la forma serie, tambien conocida como interactiva, las acciones de control estan interrelacionadas y la ganancia proporcional afecta a todasa ellas:
 
 $$ U(s) = ((E(s)(1+ T_d * s)) K_p)(1+\frac{1}{T_i * s })$$
+
+![download](https://github.com/user-attachments/assets/ac2d2310-ee8d-486f-8af0-b2a1bf265362)
+
+Figura 3:Arquitectura serie, diagrama de bloques.
 
 - Ventajas:
   - Refleja el comportamineto de los controladores analogicas y neumatico tradicionales.
@@ -71,27 +82,44 @@ Es un metodo empirico y directo para ajustar los parametros de un controlador PI
 ## 5. Criterios de desempeño para diseño de controladores PID.
 ### 5.1 Indices integrales de error.
 #### 5.1.1 ISE (Integral of Squered Error)
-$$ IAE = \int_0^T [e(t)]^2 dt $$
+$$ ISE = \int_0^T [e(t)]^2 dt $$
 
 - Penaliza con fuerza los errores grandes, ya que los eleva al cuadrado.
 - Favorece respuestas rapidas, pero puede inducir oscilaciones y poca estabilidad relativa.
+
+![7b8129c8-0cd4-49d6-8263-3005120ea1e5](https://github.com/user-attachments/assets/9ead75cc-0f46-495f-b02f-e99d6caab08f)
+
+Figura 4: Ilustracion de ISE.
 
 #### 5.1.2 IAE (Integral of Absolute Error)
 $$ IAE = \int_0^T |e(t)| dt $$
 
 - Penaliza todos los errores por igual.
 - Produce respuesta mas amortiguadas con sobre impulso modesto, pero es mas complejo de calcular analiticamente.
+
+![image](https://github.com/user-attachments/assets/22d2f443-d613-4d97-8a67-a57845dbefdc)
+
+Figura 5: Ilustracion de IAE.
+  
 #### 5.1.3 ITAE (Integral Time-weighted Absolute Error)
 $$ ITAE = \int_0^T t*|e(t)| dt $$
 
 - Aumenta el peso de errores que persisten mas tiempo.
 - Genera sistemas con bajo sobreimpulso y buenas caracteristicas de amortiguamiento.
 
+![image](https://github.com/user-attachments/assets/868cd82d-d6d3-43b5-92c2-e213b47f01d3)
+
+Figura 6: Ilustracion de ITAE.
+
 #### 5.1.4 ITSE (Integral Time-weighted Squared Error)
 $$ ITSE = \int_0^T t*[e(s)]^2 dt $$
 
 - Penalizaa tanto errores grandes como errores persistentes a lo largo del tiempo.
 - Proporciona un quilibrio entre rapidez, amortiguamineto y estabilidad.
+
+![image](https://github.com/user-attachments/assets/614db9b9-1cc0-4046-b28e-36885e686acb)
+
+Figura 7: Ilustracion ITSE.
 
 ### 5.2 Profundizacion
 - ISE es ideal para suprimir errores grandes pero suele derivar en oscilaciones, debido a la rapidez en la correcion.
@@ -118,6 +146,9 @@ Es un procedimineto empiricio diseñado para sintonnizar controladores PID cuand
    | P | $$\frac{\tau}{K_p*L}$$ | x | x |
    | PI | $$0.9(\frac{\tau}{K_p*L}$$ | $$3.3*L$$ | x |
    | PID | $$1.2(\frac{\tau}{K_p*L})$$ | $$2*L$$ | $$0.5*L$$ |
+
+   Tabla 1: Formulas de Ziegler-Nichols en lazo abierto.
+   
 #### 6.1.2 Ventajas y limitaciones.
 
 Ventajas: 
@@ -147,6 +178,9 @@ Es un planteamineto empirico diseñado para sintomizar controladores PID ( en fo
 |PI | $$\frac{1}{K}* \frac{\tau}{L}* \frac{10.8*\tau + L}{12*\tau}$$ | $$\frac{30+3(\frac{L}{\tau})}{9+20(\frac{L}{\tau})}*L$$ | X |
 | PID | $$\frac{1}{K}* \frac{\tau}{L}* \frac{16*\tau + 3 * L}{12* \tau}$$ | $$2*L$$ | $$0.5*L$$ |
 
+Tabla 2: Formulas de Cohen-Coon en lazo abierto.
+
+
 #### 6.2.3 Ventajas y limitaciones.
 
 Ventajas:
@@ -159,11 +193,13 @@ Limitaciones:
 - Solo es valido para procesos de tipo FOPTD; no aplica bien a procesos de orden superior o no lineales.
 ### 6.3 Metodo por coeficinete de ajustabilidad.
 
-| y | $$K_p$$ | $$T_in$$ | $$T_d$$ |
+| y | $$K_p$$ | $$T_i$$ | $$T_d$$ |
 |-----|-------|-----------|--------|
 | 0 a 0.1 | $$\frac{5}{K}$$ | $$\tau$$ | X |
 | 0.1 a 0.2 | $$\frac{0.5}{K}$$ | $$\tau$$ | X | 
 | 0.2 a 0.5 | $$\frac{0.5(1+0.5 * y)}{K* y}$$ | $$\tau(1+0.5* y)$$ | $$\tau * \frac{0.5* y}{0.5*y+1}$$ |
+
+Tabla 3: Formulas de Coeficiente de ajustabilidad.
 
 Donde y = $\frac{L}{\tau}$
 

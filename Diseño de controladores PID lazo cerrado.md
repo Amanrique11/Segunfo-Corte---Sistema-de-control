@@ -38,4 +38,13 @@ El metodo de rele es otro tecnica clasica de sintonizacion en lazo cerrado para 
 ### 2.1 ¿En que consiste?
 
 1. Reemplazar el controlador PID (o al menos P) por un rele:
-   Se sustituye la accion proporcional por un señal que alterna un valor alto (+d) y uno bajo (-d) 
+   Se sustituye la accion proporcional por un señal que alterna un valor alto (+d) y uno bajo (-d), segun el error sea positivo o negativo.
+2. Generacion de oscilaciones sostenidas:
+   El sistema en lazo cerrado entra en un ciclo limite oscilante con amplitud y periodo constante.
+3. Medicion de parametros criticos:
+   - Amplitud de la oscilacion del proceso(a).
+   - Amplud del cambio de señal del rele (2-d).
+   - Periodo de oscilacion ($P_u$ o $T_u$). Estos valores permiten estimar la ganancia critica $K_u$ mediante:
+
+     | Controlador | $$\frac{5*K_c}{6}(\frac{}{}
+     
